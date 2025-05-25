@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h2>Booking Confirmed!</h2>
+    <p>Thank you, {{ booking.customer_name }}. Your booking for <strong>{{ room.name }}</strong> has been confirmed.</p>
+    <p><strong>Check-in:</strong> {{ booking.checkin_date }}</p>
+    <p><strong>Check-out:</strong> {{ booking.checkout_date }}</p>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

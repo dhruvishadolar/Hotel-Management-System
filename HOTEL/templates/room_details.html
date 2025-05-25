@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ room.name }} - Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Krishna Hotel</a>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>{{ room.name }}</h1>
+        <p class="lead">Price: ₹{{ room.price }} per night</p>
+        <!-- Display additional details (e.g., features, description, images) -->
+        <img src="{{ url_for('static', filename='Images/single.jpg') }}" alt="{{ room.name }}" class="img-fluid mb-4">
+        <h3>Room Details</h3>
+        <p><!-- Add room description here --></p>
+        <h4>Features</h4>
+        <ul>
+            <li>Feature one</li>
+            <li>Feature two</li>
+            <li>Feature three</li>
+        </ul>
+        <!-- Back or Book Now links -->
+        <a href="{{ url_for('book', room_id=room.id, checkin='2025-03-01', checkout='2025-03-05') }}" class="btn btn-primary">Book Now</a>
+        <a href="{{ url_for('rooms') }}" class="btn btn-secondary">Back to Rooms</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

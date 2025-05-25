@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Room</title>
+</head>
+<body>
+    <h1>Book a Room</h1>
+    <form action="{{ url_for('book') }}" method="post">
+        <label for="customer_name">Your Name:</label>
+        <input type="text" name="customer_name" id="customer_name" required>
+        <br>
+        <label for="customer_email">Your Email:</label>
+        <input type="email" name="customer_email" id="customer_email" required>
+        <br>
+        <label for="room_id">Select Room:</label>
+        <select name="room_id" id="room_id" required>
+            {% for room in rooms %}
+            <option value="{{ room.id }}">{{ room.name }} - ${{ room.price }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Book Now</button>
+    </form>
+    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+</body>
+</html>

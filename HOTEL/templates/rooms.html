@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/common.css">
+
+    <link rel="stylesheet" href="css/common.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishna Hotel - HOME</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+</head>
+         <!--NAVBAR (unchanged) 
+         ... your navbar code ...--> 
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-3 py-lg-2 shadow-sm sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand me-5 fw-bold fs-3 h-font" href="{{ url_for('home') }}">Krishna Hotel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active me-2" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-2" href="{{ url_for('rooms') }}">Rooms</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-2" href="{{ url_for('facilities') }}">Facilities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link me-2" href="{{ url_for('contact') }}">Contact us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+            </ul>
+            {% if current_user.is_authenticated %}
+            <!-- Logged in: show avatar with first letter and Logout button -->
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                     style="width:40px; height:40px;">
+                    {{ current_user.username[0] | upper }}
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-dark ms-3">Logout</a>
+            </div>
+            {% else %}
+            <!-- Not logged in: show Login and Register buttons -->
+            <div class="d-flex">
+                <button type="button" class="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <button type="button" class="btn btn-outline-dark shadow-none" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- END NAVBAR -->
+<!-- LOGIN MODAL -->
+<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center" id="loginModalLabel">
+                        <i class="bi bi-person-circle fs-3 me-2"></i> User Login
+                    </h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <input type="email" name="email" class="form-control shadow-none" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control shadow-none" required>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <button type="submit" class="btn btn-dark shadow-none">LOGIN</button>
+                        <a href="javascript: void(0)" class="text-secondary text-decoration-none">Forgot Password</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END LOGIN MODAL -->
+<!-- REGISTER MODAL -->
+<div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center" id="registerModalLabel">
+                        <i class="bi bi-person-lines-fill fs-3 me-2"></i> User Registration
+                    </h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap lh-base">
+                        Note: Your details must match with your ID (Aadhaar card, Passport, Driving license, etc.)
+                        that will be required during check-in.
+                    </span>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Username Field -->
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" name="username" class="form-control shadow-none" required>
+                            </div>
+                            <!-- Email Field -->
+                            <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control shadow-none" required>
+                            </div>
+                            <!-- Phone Number (Optional) -->
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="number" name="phone" class="form-control shadow-none">
+                            </div>
+                            <!-- Picture (Optional) -->
+                            <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Picture</label>
+                                <input type="file" name="picture" class="form-control shadow-none">
+                            </div>
+                            <!-- Address (Optional) -->
+                            <div class="col-md-12 p-0 mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea name="address" class="form-control shadow-none" rows="1"></textarea>
+                            </div>
+                            <!-- Pincode (Optional) -->
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Pincode</label>
+                                <input type="number" name="pincode" class="form-control shadow-none">
+                            </div>
+                            <!-- Date of Birth (Optional) -->
+                            <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" name="dob" class="form-control shadow-none">
+                            </div>
+                            <!-- Password Field -->
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control shadow-none" required>
+                            </div>
+                            <!-- Confirm Password Field -->
+                            <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" name="confirm_password" class="form-control shadow-none" required>
+                            </div>
+                        </div>
+                        <div class="text-center my-1">
+                            <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END REGISTER MODAL -->
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!--MAIN CONTAINER WITH FILTERS AND ROOMS-->
+    <div class="my-5 px-4">
+        <h2 class="fw-bold h-font text-center">OUR ROOMS</h2>
+        <div class="h-line bg-dark"></div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12 mb-lg-0 mb-4">
+                <form action="{{ url_for('rooms') }}" method="GET">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title">FILTERS</h4>
+                            <!--Check Availability-->
+                            <div class="mb-4">
+                                <h5 class="mb-3" style="font-size: 18px;">Check Availability</h5>
+                                <label class="form-label">Check-in</label>
+                                <input type="date" name="checkin" class="form-control mb-3">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" name="checkout" class="form-control">
+                            </div>
+                            <!--Facilities-->
+                            <div class="mb-4">
+                                <h5 class="mb-3" style="font-size: 18px;">Facilities</h5>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" name="facilities" value="wifi" id="f1">
+                                    <label class="form-check-label" for="f1">Wifi</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" name="facilities" value="television" id="f2">
+                                    <label class="form-check-label" for="f2">Television</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" name="facilities" value="ac" id="f3">
+                                    <label class="form-check-label" for="f3">AC</label>
+                                </div>
+                            </div>
+                            <!--Guests-->
+                            <div class="mb-4">
+                                <h5 class="mb-3" style="font-size: 18px;">Guests</h5>
+                                <div class="mb-2">
+                                    <label class="form-label">Adults</label>
+                                    <input type="number" name="adults" class="form-control">
+                                </div>
+                                <div>
+                                    <label class="form-label">Children</label>
+                                    <input type="number" name="children" class="form-control">
+                                </div>
+                            </div>
+                            <!--Submit Button-->
+                            <button type="submit" class="btn btn-primary w-100" style="background-color:mediumturquoise">Apply Filters</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--END LEFT FILTER COLUMN-->
+            <!--RIGHT ROOMS COLUMN-->
+            <div class="col-lg-9 col-md-12 px-4">
+                {% for room in rooms %}
+                <div class="card mb-4 border-0 shadow">
+                    <div class="row g-0 p-3 align-items-center">
+                        <div class="col-md-5 mb-lg-0 mb-md-0 mb-3">
+                            <img src="{{ url_for('static', filename='Images/17.jpg') }}" class="img-fluid rounded" alt="{{ room.name }}">
+                        </div>
+                        <div class="col-md-5 px-lg-3 px-md-3 px-0">
+                            <h5 class="mb-3">{{ room.name }}</h5>
+                            <div class="features mb-3">
+                                <h6 class="mb-1">Features</h6>
+                                <!--Hardcoded features; update if dynamic data available-->
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">2 Rooms</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">1 Bathroom</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">1 Balcony</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">3 Sofa</span>
+                            </div>
+                            <div class="facilities mb-3">
+                                <h6 class="mb-1">Facility</h6>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">Wifi</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">Television</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">AC</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">Room heater</span>
+                            </div>
+                            <div class="guest">
+                                <h6 class="mb-1">Guest</h6>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">5 Adults</span>
+                                <span class="badge rounded-pill bg-light text-dark text-wrap">4 Children</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-lg-0 mt-md-0 mt-4 text-center">
+                            <h6 class="mb-4">₹{{ room.price }} per night</h6>
+                            <a href="{{ url_for('book', room_id=room.id, checkin='2025-03-01', checkout='2025-03-05') }}" class="btn btn-sm w-100 text-white custom-bg shadow-none mb-2" style="background-color:mediumturquoise">Book Now</a>
+
+                            <a href="{{ url_for('room_details', room_id=room.id) }}" class="btn btn-sm w-100 btn-outline-dark shadow-none">More details</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p>No rooms found matching your filters.</p>
+                {% endfor %}
+            </div>
+            <!--END RIGHT ROOMS COLUMN-->
+        </div>
+    </div>
+    <!--END MAIN CONTAINER-->
+    {% block content %}{% endblock %}
+
+    <div class="container-fluid bg-white mt-5">
+        <div class="row">
+            <div class="col-lg-4 p-4">
+                <h3 class="h-font fw-bold fs-3 mb-2">KRISHNA HOTEL</h3>
+                <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Sequi laudantium temporibus dolores nam ab dolorum in optio assumenda,
+                    corporis ratione sed distinctio impedit eos, qui repellendus ipsum tenetur! Dicta, quos?
+                </p>
+            </div>
+            <div class="col-lg-4 p-4">
+                <h5 class="mb-3">Links</h5>
+                <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none" aria-label="Go to Home">Home</a><br>
+                <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none" aria-label="Go to Rooms">Rooms</a><br>
+                <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none" aria-label="View Facilities">Facilities</a><br>
+                <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none" aria-label="Contact us">Contact us</a><br>
+                <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none" aria-label="About the hotel">About</a>
+            </div>
+            <div class="col-lg-4 p-4">
+                <h5 class="mb-3">Follow us</h5>
+                <a href="#" class="d-inline-block text-dark text-decoration-none mb-2" aria-label="Follow us on Twitter">
+                    <i class="bi bi-twitter me-1"></i> Twitter
+                </a><br>
+                <a href="#" class="d-inline-block text-dark text-decoration-none mb-2" aria-label="Follow us on Facebook">
+                    <i class="bi bi-facebook me-1"></i> Facebook
+                </a><br>
+                <a href="#" class="d-inline-block text-dark text-decoration-none" aria-label="Follow us on Instagram">
+                    <i class="bi bi-instagram me-1"></i> Instagram
+                </a><br>
+            </div>
+        </div>
+    </div>
+    <h6 class="text-center bg-dark text-white p-3 m-0">Design and Developed by KRISHNA WEBDEV</h6>
+    <!--END FOOTER
+    Bootstrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!--ROOM DETAILS MODAL-->
+    <div class="modal fade" id="roomDetailsModal" tabindex="-1" aria-labelledby="roomDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roomDetailsModalLabel">Room Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="room-details-content">
+                        <!--Dynamic room details go here-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END ROOM DETAILS MODAL-->
+    <!--JavaScript to handle More details button-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("JavaScript loaded");
+            document.querySelectorAll('.more-details-btn').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    console.log("More details button clicked!");
+                    const roomId = btn.getAttribute('data-room-id');
+                    // Fetch room details from the API endpoint
+                    fetch(`/api/room/${roomId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            const contentDiv = document.getElementById('room-details-content');
+                            contentDiv.innerHTML = `
+                                                <h3>${data.name}</h3>
+                                                <p><strong>Price:</strong> ₹${data.price} per night</p>
+                                                <p><strong>Status:</strong> ${data.status}</p>
+                                                <!-- Add more details if needed
+                                              `;
+                            const modalElement = document.getElementById('roomDetailsModal');
+                            const modal = new bootstrap.Modal(modalElement);
+                            modal.show();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching room details:', error);
+                        });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
