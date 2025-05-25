@@ -22,9 +22,9 @@ print("Test rooms added successfully!")
 
 # Create and configure the Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotel.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hotem_management_2l4a_user:pnQB0C06cNyGohtSmV48zpgnRMwYyrht@dpg-d0pcu3muk2gs739gi0b0-a/hotem_management_2l4a'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key_here'  # Replace with a strong secret key
+app.secret_key = 'hotelmanagement'  # Replace with a strong secret key
 
 # Initialize the database with the app
 db = SQLAlchemy(app)
